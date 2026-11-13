@@ -302,6 +302,7 @@ main {
   background: #090a12;
   border: 1px solid #26315d;
   border-radius: 9px;
+  transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
 }
 
 .info-card p:last-child,
@@ -381,10 +382,10 @@ main {
 }
 
 .contact-panel {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: clamp(20px, 4vw, 44px);
   background: #10152b;
 }
 
@@ -392,8 +393,73 @@ main {
   margin-bottom: 10px;
 }
 
-.contact-panel p:last-child {
-  margin-bottom: 0;
+.contact-copy > p:not(.eyebrow) {
+  max-width: 480px;
+  margin-bottom: 22px;
+}
+
+.contact-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  list-style: none;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: #090a12;
+  border: 1px solid #26315d;
+  border-radius: 9px;
+  transition: transform 200ms ease, border-color 200ms ease, background-color 200ms ease;
+}
+
+.contact-link:hover,
+.contact-link:focus-visible {
+  background: #0d1024;
+  border-color: #5269c7;
+  transform: translateX(4px);
+}
+
+.contact-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: #aebaff;
+  background: #162055;
+  border-radius: 50%;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.contact-link:hover .contact-icon,
+.contact-link:focus-visible .contact-icon {
+  color: #ffffff;
+  background: #263b91;
+  transform: scale(1.08);
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.contact-label {
+  color: #9eafff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.contact-value {
+  color: #ffffff;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .site-footer {
@@ -520,7 +586,8 @@ main {
   }
 
   .hero-panel,
-  .about-layout {
+  .about-layout,
+  .contact-panel {
     grid-template-columns: 1fr;
   }
 
@@ -594,8 +661,11 @@ main {
   }
 
   .contact-panel {
-    align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .contact-link {
+    padding: 12px;
   }
 
   .form-field-wide {
@@ -627,3 +697,213 @@ main {
     padding: 16px;
   }
 }
+
+/* ==================================================
+   ANIMATIONS (pure CSS, no JavaScript)
+   ================================================== */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-36px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(36px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes soft-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(101, 120, 208, 0); }
+  50%      { box-shadow: 0 0 0 6px rgba(101, 120, 208, 0.18); }
+}
+
+/* Page load: header, then hero content one piece at a time */
+.site-header {
+  animation: fade-down 600ms ease-out backwards;
+}
+
+.hero-copy .eyebrow {
+  animation: slide-in-left 700ms ease-out 150ms backwards;
+}
+
+.hero-copy h1 {
+  animation: slide-in-left 700ms ease-out 280ms backwards;
+}
+
+.hero-copy > p:not(.eyebrow) {
+  animation: slide-in-left 700ms ease-out 420ms backwards;
+}
+
+.hero-copy .button-link {
+  animation: slide-in-left 700ms ease-out 560ms backwards;
+}
+
+.hero-image {
+  animation: slide-in-right 900ms ease-out 250ms backwards;
+}
+
+/* Nav links slide in one after another */
+.nav-list li {
+  animation: slide-in-left 500ms ease-out backwards;
+}
+
+.nav-list li:nth-child(1) { animation-delay: 300ms; }
+.nav-list li:nth-child(2) { animation-delay: 370ms; }
+.nav-list li:nth-child(3) { animation-delay: 440ms; }
+.nav-list li:nth-child(4) { animation-delay: 510ms; }
+.nav-list li:nth-child(5) { animation-delay: 580ms; }
+.nav-list li:nth-child(6) { animation-delay: 650ms; }
+.nav-list li:nth-child(7) { animation-delay: 720ms; }
+
+/* Hover and focus feedback */
+.nav-list a {
+  position: relative;
+}
+
+.nav-list a:not(.nav-book)::after {
+  position: absolute;
+  right: 12px;
+  bottom: 6px;
+  left: 12px;
+  height: 2px;
+  content: "";
+  background: #aebaff;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.nav-list a:not(.nav-book):hover::after,
+.nav-list a:not(.nav-book):focus-visible::after {
+  transform: scaleX(1);
+}
+
+.nav-list .nav-book {
+  animation: soft-pulse 3.2s ease-in-out 1.5s infinite;
+}
+
+.button-link:active,
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.info-card:hover,
+.style-card:hover {
+  border-color: #4a5fb8;
+  box-shadow: 0 10px 26px rgba(8, 12, 40, 0.55);
+  transform: translateY(-4px);
+}
+
+.image-frame img {
+  transition: transform 700ms ease;
+}
+
+.hero-image:hover img,
+.about-image:hover img,
+.style-card:hover .style-image img {
+  transform: scale(1.04);
+}
+
+.brand {
+  transition: opacity 200ms ease;
+}
+
+.brand:hover {
+  opacity: 0.8;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #6578d0;
+  box-shadow: 0 0 0 3px rgba(101, 120, 208, 0.2);
+  outline: none;
+}
+
+/* Slide-in on scroll (pure CSS, no JavaScript)
+   Words slide in from the left; backgrounds, images, cards and forms from the right.
+   Each slide finishes after a short, fixed scroll distance (about 100px), so tall
+   sections and elements near the end of the page still land in their place.
+   Browsers without scroll-driven animation simply show everything. */
+@supports (animation-timeline: view()) {
+  /* Words: from the left */
+  .content-panel .eyebrow,
+  .content-panel h1,
+  .content-panel h2,
+  .section-heading > p,
+  .about-copy > p,
+  .contact-copy > * {
+    animation: slide-in-left linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0px entry 100px;
+  }
+
+  /* Backgrounds, images, cards and forms: from the right */
+  .content-panel,
+  .about-image,
+  .card-grid > *,
+  .style-grid > *,
+  .contact-list > *,
+  .booking-form .form-field,
+  .booking-form .submit-button {
+    animation: slide-in-right linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0px entry 100px;
+  }
+
+  /* Gentle stagger */
+  .card-grid > *:nth-child(3n + 2),
+  .style-grid > *:nth-child(even),
+  .contact-list > *:nth-child(2),
+  .booking-form .form-field:nth-child(even) {
+    animation-range: entry 15px entry 115px;
+  }
+
+  .card-grid > *:nth-child(3n),
+  .contact-list > *:nth-child(3),
+  .booking-form .submit-button {
+    animation-range: entry 30px entry 130px;
+  }
+}
+
+/* Stops slides from the right causing sideways scrolling on phones */
+body {
+  overflow-x: clip;
+}
+
+/* Respect people who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+   }
+   
